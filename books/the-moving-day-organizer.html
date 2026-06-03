@@ -1,560 +1,307 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>The Moving Day Organizer — Nest</title>
-  <meta name="description" content="The Moving Day Organizer (Digital Download). Pack, move, and settle in without the chaos.">
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Moving Day Organizer | Nest</title>
+<meta name="description" content="Pack, move, and settle in without the chaos.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,900;1,9..144,500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FBF6F0; --ink:#2E2118; --ink-soft:#5C4A3A; --clay:#B45309;
+  --clay-dark:#8A3D06; --line:#E7DACB; --card:#FFFDFA; --tag-bg:#F1E4D4;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--bg);color:var(--ink);
+  font-family:'Inter',system-ui,sans-serif;font-size:17px;line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,.serif{font-family:'Fraunces','Playfair Display',Georgia,serif}
+a{color:inherit}
+img{display:block;max-width:100%}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
 
-  <style>
-    
-  :root {
-    --bg:         #0E0F12;
-    --bg-elev:    #16171C;
-    --bg-card:    #1A1C22;
-    --ink:        #F5F2EE;
-    --muted:      #B5B8C5;
-    --muted-2:    #989CAA;
-    --rule:       #2A2D3A;
-    --rule-hi:    #393D4E;
-    --accent:     #B45309;
-    --accent-soft:#FEF3C7;
-    --cream:      #F2EFEA;
-    --cream-ink:  #1F2026;
-    --cream-mute: #5E6170;
-    --cream-rule: #DAD5CC;
-    --accent-dim: #7C2D12;
-    --ok:         #4ADE80;
-    --display:    'Barlow Condensed', system-ui, sans-serif;
-    --body:       'DM Sans', system-ui, sans-serif;
-    --mono:       'IBM Plex Mono', ui-monospace, monospace;
-    --maxw:       1240px;
-    --r:          14px;
-    --r-sm:       10px;
-  }
-  *, *::before, *::after { box-sizing: border-box; }
-  html, body { margin: 0; padding: 0; }
-  body {
-    background: var(--bg);
-    color: var(--ink);
-    font-family: var(--body);
-    font-size: 18px;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-  }
-  a { color: inherit; text-decoration: none; }
-  img { display: block; max-width: 100%; }
-  ::selection { background: var(--accent); color: #fff; }
-  .mono { font-family: var(--mono); font-feature-settings: "tnum"; }
-  .container { max-width: var(--maxw); margin: 0 auto; padding: 0 28px; }
-  @media (max-width: 640px) { .container { padding: 0 18px; } }
+/* ---- nav ---- */
+.nav{position:sticky;top:0;z-index:50;background:rgba(251,246,240,.88);
+  backdrop-filter:saturate(140%) blur(10px);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;
+  height:74px;max-width:1180px;margin:0 auto;padding:0 28px}
+.brand{font-family:'Fraunces',serif;font-weight:900;font-size:30px;
+  letter-spacing:-.01em;text-decoration:none;color:var(--ink);line-height:1}
+.brand .dot{color:var(--clay)}
+.nav-links{display:flex;align-items:center;gap:30px}
+.nav-links a{text-decoration:none;font-size:14.5px;font-weight:500;
+  color:var(--ink-soft);letter-spacing:.01em;transition:color .15s}
+.nav-links a:hover{color:var(--clay)}
+.cart-link{display:inline-flex;align-items:center;gap:7px;
+  font-weight:600!important;color:var(--ink)!important;
+  border:1.5px solid var(--ink);border-radius:999px;padding:8px 16px!important}
+.cart-link:hover{background:var(--ink);color:var(--bg)!important}
+.cart-link .pill{background:var(--clay);color:#fff;border-radius:999px;
+  min-width:20px;height:20px;display:inline-flex;align-items:center;
+  justify-content:center;font-size:12px;font-weight:700;padding:0 5px}
+.menu-toggle{display:none}
 
-  /* nav */
-  .topbar {
-    position: sticky; top: 0; z-index: 50;
-    background: rgba(14,15,18,0.92);
-    backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--rule);
-  }
-  .topbar .row {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 18px 28px;
-    max-width: var(--maxw); margin: 0 auto;
-  }
-  .wordmark {
-    font-family: var(--display);
-    font-weight: 700; font-size: 30px;
-    letter-spacing: -0.005em;
-    color: var(--ink);
-    display: inline-flex; align-items: center; gap: 12px;
-  }
-  .wordmark .mark {
-    width: 32px; height: 32px;
-    background: var(--accent);
-    border-radius: 50%;
-    display: inline-flex; align-items: center; justify-content: center;
-    color: #fff; font-size: 16px; font-weight: 600;
-    font-family: var(--body);
-  }
-  .nav-links {
-    display: flex; gap: 30px; align-items: center;
-    font-size: 16px; color: var(--muted);
-    font-weight: 500;
-  }
-  .nav-links a { transition: color .14s ease; }
-  .nav-links a:hover { color: var(--ink); }
-  .cart-btn {
-    display: inline-flex; align-items: center; gap: 10px;
-    padding: 10px 16px;
-    background: var(--bg-elev);
-    border: 1px solid var(--rule-hi);
-    border-radius: var(--r-sm);
-    font-size: 15px;
-    font-weight: 500;
-    transition: border-color .14s ease;
-  }
-  .cart-btn:hover { border-color: var(--accent); }
-  .cart-btn[data-empty="0"] { border-color: var(--accent); color: var(--accent); }
-  .cart-btn .cb-count {
-    background: var(--accent); color: #fff;
-    border-radius: 999px;
-    min-width: 24px; height: 24px;
-    display: inline-flex; align-items: center; justify-content: center;
-    font-size: 13px; font-weight: 600;
-  }
-  @media (max-width: 720px) {
-    .nav-links { display: none; }
-  }
+/* ---- hero ---- */
+.hero{padding:70px 0 56px;border-bottom:1px solid var(--line)}
+.hero-grid{display:grid;grid-template-columns:1.35fr .9fr;gap:56px;align-items:center}
+.eyebrow{display:inline-block;font-size:13px;font-weight:600;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--clay);margin-bottom:22px}
+.hero h1{font-size:clamp(40px,6.2vw,76px);line-height:1.02;font-weight:900;
+  letter-spacing:-.02em;margin:0 0 24px}
+.hero h1 em{font-style:italic;color:var(--clay);font-weight:600}
+.hero .lede{font-size:20px;line-height:1.6;color:var(--ink-soft);max-width:34em;margin:0 0 32px}
+.btn{display:inline-flex;align-items:center;gap:9px;font-weight:600;font-size:16px;
+  text-decoration:none;padding:14px 26px;border-radius:999px;border:1.5px solid transparent;
+  cursor:pointer;transition:transform .12s,background .15s,color .15s}
+.btn-primary{background:var(--clay);color:#fff}
+.btn-primary:hover{background:var(--clay-dark);transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--ink)}
+.btn-ghost:hover{background:var(--ink);color:var(--bg)}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap}
+.feature{position:relative}
+.feature-card{background:var(--card);border:1px solid var(--line);border-radius:16px;
+  padding:18px;box-shadow:0 22px 50px -28px rgba(46,33,24,.45);
+  transform:rotate(-1.6deg);transition:transform .25s}
+.feature-card:hover{transform:rotate(0)}
+.feature-card img{width:100%;border-radius:9px;aspect-ratio:3/4;object-fit:cover;
+  background:var(--tag-bg)}
+.feature-meta{display:flex;justify-content:space-between;align-items:baseline;
+  margin-top:14px;gap:12px}
+.feature-meta .t{font-family:'Fraunces',serif;font-weight:600;font-size:18px;line-height:1.2}
+.feature-meta .p{font-weight:700;color:var(--clay);white-space:nowrap}
+.feature-flag{position:absolute;top:-14px;left:-10px;background:var(--ink);color:var(--bg);
+  font-size:12px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  padding:7px 14px;border-radius:999px;transform:rotate(-3deg)}
 
-  /* buttons */
-  .btn {
-    display: inline-flex; align-items: center; gap: 10px;
-    padding: 16px 26px;
-    background: var(--accent); color: #fff;
-    border: 0; border-radius: 999px;
-    font-family: var(--body); font-weight: 600; font-size: 16px;
-    cursor: pointer;
-    transition: transform .12s ease, background .14s ease;
-  }
-  .btn:hover { transform: translateY(-1px); background: #9A4708; }
-  .btn--ghost {
-    background: transparent; color: var(--ink);
-    border: 1px solid var(--rule-hi);
-  }
-  .btn--ghost:hover { background: var(--bg-elev); border-color: var(--ink); }
-  .btn--big { padding: 18px 32px; font-size: 17px; }
+/* ---- section heading ---- */
+.sec{padding:64px 0}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;
+  gap:24px;margin-bottom:38px;flex-wrap:wrap}
+.sec-head h2{font-size:clamp(30px,4vw,46px);font-weight:800;letter-spacing:-.02em;margin:0}
+.sec-head .sub{color:var(--ink-soft);font-size:16px;max-width:30em}
+.rule{height:1px;background:var(--line);border:0;margin:0}
 
-  /* footer */
-  footer.foot {
-    margin-top: 100px;
-    border-top: 1px solid var(--rule);
-    padding: 56px 28px 32px;
-    background: #0A0B0E;
-  }
-  footer.foot .row {
-    max-width: var(--maxw); margin: 0 auto;
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr 1fr;
-    gap: 36px;
-  }
-  footer.foot h4 {
-    font-size: 15px; font-weight: 600;
-    margin: 0 0 16px; color: var(--ink);
-  }
-  footer.foot a {
-    display: block; padding: 6px 0;
-    color: var(--muted); font-size: 16px;
-    transition: color .14s ease;
-  }
-  footer.foot a:hover { color: var(--accent); }
-  footer.foot .colophon {
-    color: var(--muted); font-size: 16px; line-height: 1.7;
-  }
-  footer.foot .colophon strong { color: var(--ink); font-weight: 600; }
-  footer.foot .smallprint {
-    max-width: var(--maxw); margin: 44px auto 0;
-    padding-top: 24px; border-top: 1px solid var(--rule);
-    font-size: 14px; color: var(--muted);
-    display: flex; justify-content: space-between; flex-wrap: wrap; gap: 14px;
-  }
-  @media (max-width: 900px) { footer.foot .row { grid-template-columns: 1fr 1fr; } }
-  @media (max-width: 540px) { footer.foot .row { grid-template-columns: 1fr; } }
+/* ---- masonry catalog ---- */
+.masonry{column-count:3;column-gap:30px}
+@media(max-width:980px){.masonry{column-count:2}}
+@media(max-width:620px){.masonry{column-count:1}}
+.bookcard{break-inside:avoid;display:block;text-decoration:none;color:inherit;
+  background:var(--card);border:1px solid var(--line);border-radius:14px;
+  overflow:hidden;margin:0 0 30px;transition:transform .2s,box-shadow .2s,border-color .2s}
+.bookcard:hover{transform:translateY(-4px);box-shadow:0 26px 46px -30px rgba(46,33,24,.5);
+  border-color:#D8C5AE}
+.bookcard .cov{width:100%;object-fit:cover;background:var(--tag-bg);display:block}
+.bookcard .body{padding:20px 20px 22px}
+.tag{display:inline-block;font-size:11.5px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--clay);background:var(--tag-bg);
+  padding:5px 11px;border-radius:999px;margin-bottom:13px}
+.bookcard h3{font-size:23px;font-weight:600;line-height:1.18;margin:0 0 8px;letter-spacing:-.01em}
+.bookcard .st{color:var(--ink-soft);font-size:15px;line-height:1.5;margin:0 0 16px}
+.bookcard .foot{display:flex;align-items:center;justify-content:space-between}
+.bookcard .price{font-family:'Fraunces',serif;font-weight:600;font-size:21px;color:var(--ink)}
+.bookcard .arrow{font-size:14px;font-weight:600;color:var(--clay)}
 
+/* ---- about ---- */
+.about{background:#F4E9DC;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.about-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:48px;align-items:start;padding:70px 0}
+.about h2{font-size:clamp(30px,4vw,48px);font-weight:800;letter-spacing:-.02em;margin:0;line-height:1.05}
+.about h2 .amp{color:var(--clay)}
+.about p{color:var(--ink-soft);font-size:17.5px;margin:0 0 20px}
+.about .pp{max-width:38em}
 
-    /* Top spread — single row, no sticky rail */
-    .spread {
-      max-width: var(--maxw); margin: 0 auto;
-      padding: 40px 28px 60px;
-    }
-    .crumbs {
-      font-size: 15px; color: var(--muted);
-      margin-bottom: 24px;
-    }
-    .crumbs a:hover { color: var(--ink); }
-    .crumbs span { color: var(--ink); }
+/* ---- footer ---- */
+.foot-main{padding:54px 0 60px}
+.foot-top{display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap;
+  align-items:flex-start;margin-bottom:34px}
+.foot-main .brand{font-size:26px}
+.foot-tag{color:var(--ink-soft);max-width:26em;margin:14px 0 0;font-size:15px}
+.foot-links{display:flex;gap:28px;flex-wrap:wrap}
+.foot-links a{text-decoration:none;color:var(--ink-soft);font-size:14.5px;font-weight:500}
+.foot-links a:hover{color:var(--clay)}
+.foot-bottom{border-top:1px solid var(--line);padding-top:22px;color:var(--ink-soft);font-size:13.5px;
+  display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
 
-    .spread .grid2 {
-      display: grid;
-      grid-template-columns: 0.85fr 1fr;
-      gap: 56px;
-      align-items: start;
-    }
-    .cover-card {
-      background: var(--bg-elev);
-      border-radius: var(--r);
-      padding: 26px;
-      border: 1px solid var(--rule);
-    }
-    .cover-card img {
-      width: 100%; height: auto;
-      aspect-ratio: 3 / 4;
-      object-fit: cover;
-      border-radius: var(--r-sm);
-      box-shadow: 0 24px 50px rgba(0,0,0,0.55);
-    }
+/* ---- book page ---- */
+.crumb{padding:26px 0 0;font-size:14px;color:var(--ink-soft)}
+.crumb a{text-decoration:none;color:var(--ink-soft)}
+.crumb a:hover{color:var(--clay)}
+.crumb span{color:var(--ink)}
+.product{display:grid;grid-template-columns:.95fr 1.05fr;gap:56px;padding:36px 0 64px;align-items:start}
+.product-cov{position:sticky;top:100px}
+.product-cov img{width:100%;border-radius:16px;border:1px solid var(--line);
+  box-shadow:0 30px 60px -34px rgba(46,33,24,.5);aspect-ratio:3/4;object-fit:cover;background:var(--tag-bg)}
+.product h1{font-size:clamp(34px,4.6vw,54px);font-weight:800;letter-spacing:-.02em;
+  line-height:1.05;margin:14px 0 14px}
+.product .psub{font-size:20px;color:var(--ink-soft);margin:0 0 26px;line-height:1.5}
+.price-row{display:flex;align-items:baseline;gap:14px;margin-bottom:8px}
+.bigprice{font-family:'Fraunces',serif;font-weight:700;font-size:46px;color:var(--clay);line-height:1}
+.price-row .note{color:var(--ink-soft);font-size:14px}
+.buy-row{display:flex;gap:14px;flex-wrap:wrap;margin:26px 0 12px}
+.add-msg{opacity:0;transform:translateY(4px);transition:opacity .25s,transform .25s;
+  color:var(--clay);font-weight:600;font-size:15px;height:0;margin:0;pointer-events:none}
+.add-msg.show{opacity:1;transform:none;height:auto;margin:4px 0 0}
+.meta-strip{display:flex;gap:26px;flex-wrap:wrap;border-top:1px solid var(--line);
+  border-bottom:1px solid var(--line);padding:18px 0;margin:24px 0 4px}
+.meta-strip div{font-size:14px}
+.meta-strip .k{color:var(--ink-soft);display:block;font-size:12.5px;letter-spacing:.06em;
+  text-transform:uppercase;margin-bottom:3px}
+.meta-strip .v{font-weight:600}
+.prose{padding:8px 0 0}
+.prose h2{font-size:30px;font-weight:700;letter-spacing:-.01em;margin:40px 0 16px}
+.prose p{color:var(--ink-soft);margin:0 0 18px}
+.inside{list-style:none;padding:0;margin:8px 0 0;display:grid;
+  grid-template-columns:1fr 1fr;gap:12px 28px}
+.inside li{position:relative;padding-left:30px;color:var(--ink);font-size:16px;line-height:1.5}
+.inside li::before{content:"";position:absolute;left:0;top:9px;width:13px;height:13px;
+  border-radius:50%;border:2px solid var(--clay);background:var(--tag-bg)}
+@media(max-width:620px){.inside{grid-template-columns:1fr}}
 
-    .info-col {}
-    .bucket-tag {
-      display: inline-flex; align-items: center; gap: 8px;
-      padding: 8px 16px;
-      background: rgba(180,83,9,0.12);
-      color: var(--accent);
-      border-radius: 999px;
-      font-size: 15px; font-weight: 500;
-      margin-bottom: 20px;
-    }
-    h1.title {
-      font-family: var(--display); font-weight: 700;
-      font-size: clamp(40px, 5vw, 56px);
-      line-height: 1.05; letter-spacing: -0.01em;
-      margin: 0 0 12px;
-    }
-    .by { font-size: 18px; color: var(--muted); margin: 0 0 24px; }
-    .by b { color: var(--ink); font-weight: 500; }
+/* more from library */
+.more{border-top:1px solid var(--line);padding:60px 0 10px}
+.more-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:26px;margin-top:30px}
+@media(max-width:760px){.more-grid{grid-template-columns:1fr}}
+.minicard{text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--line);
+  border-radius:13px;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.minicard:hover{transform:translateY(-3px);box-shadow:0 22px 40px -30px rgba(46,33,24,.5)}
+.minicard img{width:100%;aspect-ratio:3/4;object-fit:cover;background:var(--tag-bg)}
+.minicard .mb{padding:16px}
+.minicard h3{font-size:19px;font-weight:600;margin:0 0 6px;line-height:1.2}
+.minicard .mp{color:var(--clay);font-weight:700;font-family:'Fraunces',serif;font-size:18px}
 
-    .price-block {
-      background: var(--bg-card);
-      border: 1px solid var(--rule);
-      border-radius: var(--r);
-      padding: 28px;
-      margin: 24px 0 28px;
-    }
-    .price-row { display: flex; align-items: baseline; gap: 14px; margin-bottom: 20px; }
-    .price-row .price {
-      font-family: var(--display); font-weight: 700;
-      font-size: 56px; line-height: 1;
-      color: var(--accent);
-      letter-spacing: -0.01em;
-    }
-    .price-row .currency { font-size: 16px; color: var(--muted); }
-    .formats { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
-    .fmt-chip {
-      padding: 6px 14px;
-      background: var(--bg-elev);
-      border: 1px solid var(--rule-hi);
-      border-radius: 999px;
-      font-size: 14px; color: var(--muted);
-      font-weight: 500;
-    }
-    .buy-actions { display: flex; gap: 10px; flex-wrap: wrap; }
-    .buy-actions .btn { flex: 1; justify-content: center; }
-    .add-msg {
-      margin-top: 16px;
-      font-size: 15px;
-      color: var(--ok);
-      display: none;
-    }
-    .add-msg.show { display: flex; align-items: center; gap: 8px; }
-
-    .info-list {
-      margin-top: 22px;
-      padding-top: 22px;
-      border-top: 1px solid var(--rule);
-    }
-    .info-row {
-      display: flex; justify-content: space-between;
-      padding: 10px 0;
-      font-size: 16px;
-    }
-    .info-k { color: var(--muted); }
-    .info-v { color: var(--ink); font-weight: 500; }
-
-    /* Reading column — description sits below the spread, centered, max 720 */
-    .read-col {
-      max-width: 760px; margin: 0 auto;
-      padding: 30px 28px 60px;
-    }
-    .desc h2 {
-      font-family: var(--display); font-weight: 700;
-      font-size: 30px; margin: 0 0 16px;
-      letter-spacing: -0.005em;
-    }
-    .desc p { margin: 0 0 18px; color: var(--ink); line-height: 1.7; font-size: 19px; }
-    .desc ul { padding-left: 0; list-style: none; margin: 20px 0; }
-    .desc li {
-      padding-left: 32px;
-      position: relative;
-      margin: 12px 0;
-      color: var(--ink);
-      line-height: 1.6;
-      font-size: 19px;
-    }
-    .desc li::before {
-      content: "✓";
-      position: absolute;
-      left: 0; top: 0;
-      color: var(--accent);
-      font-weight: 600;
-      font-size: 19px;
-    }
-    .desc-h {
-      font-family: var(--display); font-weight: 700;
-      font-size: 24px;
-      margin: 30px 0 12px;
-      letter-spacing: -0.005em;
-    }
-
-    /* reviews — sit on cream background, contrast break */
-    .reviews-band { background: var(--cream); color: var(--cream-ink); padding: 80px 28px; }
-    .reviews {
-      max-width: var(--maxw); margin: 0 auto;
-    }
-    .reviews h2 {
-      font-family: var(--display); font-weight: 700;
-      font-size: clamp(30px, 3.4vw, 42px);
-      margin: 0 0 32px;
-      letter-spacing: -0.01em;
-      color: var(--cream-ink);
-    }
-    .review-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 22px;
-    }
-    .review {
-      background: #FFF;
-      border: 1px solid var(--cream-rule);
-      border-radius: var(--r);
-      padding: 28px 30px;
-      margin: 0;
-    }
-    .review blockquote { margin: 0 0 16px; line-height: 1.6; font-size: 18px; color: var(--cream-ink); }
-    .review figcaption { color: var(--cream-mute); font-size: 15px; font-weight: 500; }
-    @media (max-width: 720px) { .review-grid { grid-template-columns: 1fr; } }
-
-    /* xsell */
-    .xsell {
-      max-width: var(--maxw); margin: 0 auto;
-      padding: 60px 28px 0;
-    }
-    .xsell h2 {
-      font-family: var(--display); font-weight: 700;
-      font-size: clamp(30px, 3.4vw, 42px);
-      margin: 0 0 32px;
-      letter-spacing: -0.01em;
-    }
-    .xsell .grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 22px;
-    }
-    @media (max-width: 720px) { .xsell .grid { grid-template-columns: 1fr 1fr; } }
-
-    /* Reuse card styles for xsell */
-    .card {
-      display: flex; flex-direction: column;
-      background: var(--bg-card);
-      border-radius: var(--r);
-      overflow: hidden;
-      border: 1px solid var(--rule);
-      transition: transform .18s ease, border-color .18s ease;
-    }
-    .card:hover { transform: translateY(-4px); border-color: var(--accent); }
-    .card-cover { position: relative; aspect-ratio: 3 / 4; overflow: hidden; background: var(--bg); }
-    .card-cover img { width: 100%; height: 100%; object-fit: cover; transition: transform .35s ease; }
-    .card:hover .card-cover img { transform: scale(1.04); }
-    .card-bucket {
-      position: absolute; top: 12px; left: 12px;
-      padding: 5px 10px;
-      background: rgba(14,15,18,0.85); backdrop-filter: blur(8px);
-      border-radius: 999px; font-size: 12px; font-weight: 500;
-    }
-    .card-body { padding: 22px 22px 24px; display: flex; flex-direction: column; flex: 1; gap: 8px; }
-    .card-title {
-      margin: 0;
-      font-family: var(--display); font-weight: 700;
-      font-size: 24px; line-height: 1.18; letter-spacing: -0.005em;
-      display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden;
-    }
-    .card-byline { margin: 0 0 8px; font-size: 15px; color: var(--muted); }
-    .card-foot { margin-top: auto; display: flex; justify-content: space-between; align-items: center; padding-top: 10px; }
-    .card-price { font-size: 20px; font-weight: 600; color: var(--accent); }
-    .card-cta { font-size: 15px; font-weight: 500; color: var(--muted); }
-    .card:hover .card-cta { color: var(--accent); }
-
-    @media (max-width: 880px) {
-      .spread .grid2 { grid-template-columns: 1fr; gap: 32px; }
-    }
-  </style>
+/* responsive */
+@media(max-width:860px){
+  .hero-grid{grid-template-columns:1fr;gap:44px}
+  .feature{max-width:330px}
+  .about-grid{grid-template-columns:1fr;gap:24px;padding:56px 0}
+  .product{grid-template-columns:1fr;gap:32px}
+  .product-cov{position:static;max-width:340px}
+}
+@media(max-width:680px){
+  .nav-links{display:none;position:absolute;top:74px;left:0;right:0;background:var(--bg);
+    flex-direction:column;align-items:flex-start;gap:0;padding:8px 28px 20px;
+    border-bottom:1px solid var(--line)}
+  .nav-links.open{display:flex}
+  .nav-links a{padding:11px 0;width:100%;font-size:16px}
+  .cart-link{margin-top:8px}
+  .menu-toggle{display:inline-flex;flex-direction:column;gap:5px;background:none;border:0;
+    cursor:pointer;padding:8px}
+  .menu-toggle span{width:24px;height:2px;background:var(--ink);display:block}
+  .nav-in{position:relative}
+}
+</style>
 </head>
 <body>
+<header class="nav"><div class="nav-in">
+  <a class="brand" href="../index.html">Nest<span class="dot">.</span></a>
+  <button class="menu-toggle" aria-label="Menu" onclick="document.getElementById('navlinks').classList.toggle('open')"><span></span><span></span><span></span></button>
+  <nav class="nav-links" id="navlinks">
+    <a href="../index.html#library">Library</a>
+    <a href="../index.html#about">About</a>
+    <a href="../delivery.html">Delivery</a>
+    <a href="../returns.html">Refunds</a>
+    <a class="cart-link" href="../checkout.html">Cart <span class="pill" id="cart-count">0</span></a>
+  </nav>
+</div></header>
+<main>
+  <div class="wrap">
+    <nav class="crumb"><a href="../index.html">Nest</a> &nbsp;/&nbsp; <a href="../index.html#library">Library</a> &nbsp;/&nbsp; <span>The Moving Day Organizer</span></nav>
 
-  <header class="topbar">
-    <div class="row">
-      <a class="wordmark" href="../index.html">
-        <span class="mark">N</span>Nest
-      </a>
-      <nav class="nav-links">
-        <a href="../index.html#library">Library</a>
-        <a href="../index.html#about">About</a>
-        <a href="../delivery.html">Delivery</a>
-        <a href="../returns.html">Refunds</a>
-      </nav>
-      <a class="cart-btn" href="../checkout.html" id="cart-btn" data-empty="1">
-        🛒 Cart <span class="cb-count" id="cart-count">0</span>
-      </a>
-    </div>
-  </header>
-
-<section class="spread">
-  <div class="crumbs">
-    <a href="../index.html">Library</a> / <span>The Moving Day Organizer</span>
-  </div>
-  <div class="grid2">
-    <div class="cover-card">
-      <img src="../covers/the-moving-day-organizer.jpg" alt="The Moving Day Organizer cover">
-    </div>
-    <div class="info-col">
-      <div class="bucket-tag">🏠 Home guides</div>
-      <h1 class="title">The Moving Day Organizer</h1>
-      <p class="by">A <b>Nest</b> guide</p>
-      <div class="price-block">
+    <section class="product">
+      <div class="product-cov">
+        <img src="../covers/the-moving-day-organizer.jpg" alt="The Moving Day Organizer cover">
+      </div>
+      <div>
+        <span class="tag">Moving</span>
+        <h1>The Moving Day Organizer</h1>
+        <p class="psub">Pack, move, and settle in without the chaos.</p>
         <div class="price-row">
-          <span class="price">$19.95</span>
-          <span class="currency">USD · one-time</span>
+          <span class="bigprice">$19.95</span>
+          <span class="note">Instant PDF download</span>
         </div>
-        <div class="formats"><span class="fmt-chip">PDF</span><span class="fmt-chip">Instant download</span></div>
-        <div class="buy-actions">
-          <button class="btn" id="add">🛒 Add to cart</button>
-          <button class="btn btn--ghost" id="buy">Buy now</button>
+        <div class="buy-row">
+          <button class="btn btn-primary" id="add">Add to cart</button>
+          <button class="btn btn-ghost" id="buy">Buy now</button>
         </div>
-        <div class="add-msg" id="add-msg">✓ Added to cart</div>
-        <div class="info-list">
-          <div class="info-row"><span class="info-k">📨 Delivery</span><span class="info-v">By email</span></div>
-          <div class="info-row"><span class="info-k">Pages</span><span class="info-v">32</span></div>
-          <div class="info-row"><span class="info-k">🛡️ Refund</span><span class="info-v">30 days</span></div>
-          <div class="info-row"><span class="info-k">📂 Format</span><span class="info-v">PDF</span></div>
+        <p class="add-msg" id="add-msg">Added to your cart.</p>
+        <div class="meta-strip">
+          <div><span class="k">Format</span><span class="v">PDF ebook</span></div>
+          <div><span class="k">Read time</span><span class="v">One evening</span></div>
+          <div><span class="k">Publisher</span><span class="v">Nest</span></div>
         </div>
       </div>
-    </div>
+    </section>
+
+    <section class="prose">
+      <h2>About this ebook</h2>
+        <p>Moving is consistently ranked among life&#x27;s most stressful events, and disorganization is the main reason. Boxes go unlabeled, essentials vanish, and the new home fills with clutter you meant to leave behind. This book replaces that chaos with a clear plan. From the first decision to the last unpacked box, you will know what to do and when, so the move stays under control.</p>
+        <p>The approach starts well before moving day. You declutter first so you move less, then pack room by room with a labeling system that makes unpacking simple. The book covers the move itself, the crucial first night, and settling in without recreating the clutter you escaped. A move is a rare chance to reset your whole home, and this plan helps you seize it.</p>
+
+      <h2>What's inside</h2>
+      <ul class="inside">
+          <li>Declutter before you pack so you move less</li>
+          <li>Build a packing timeline that prevents last minute panic</li>
+          <li>Label boxes so unpacking is fast and obvious</li>
+          <li>Pack an essentials kit for a calm first night</li>
+          <li>Coordinate moving day without forgotten details</li>
+          <li>Set up the new home without recreating clutter</li>
+          <li>Settle in room by room with a clear order</li>
+      </ul>
+    </section>
+
+    <section class="more">
+      <div class="sec-head"><h2>More from the library</h2></div>
+      <div class="more-grid">
+      <a class="minicard" href="../books/the-15-minute-declutter.html">
+        <img src="../covers/the-15-minute-declutter.jpg" alt="The 15-Minute Declutter cover" loading="lazy">
+        <div class="mb"><h3>The 15-Minute Declutter</h3><span class="mp">$19.95</span></div>
+      </a>
+      <a class="minicard" href="../books/small-space-storage-playbook.html">
+        <img src="../covers/small-space-storage-playbook.jpg" alt="Small-Space Storage Playbook cover" loading="lazy">
+        <div class="mb"><h3>Small-Space Storage Playbook</h3><span class="mp">$22.49</span></div>
+      </a>
+      <a class="minicard" href="../books/the-paper-and-inbox-reset.html">
+        <img src="../covers/the-paper-and-inbox-reset.jpg" alt="The Paper &amp; Inbox Reset cover" loading="lazy">
+        <div class="mb"><h3>The Paper &amp; Inbox Reset</h3><span class="mp">$21.95</span></div>
+      </a>
+      </div>
+    </section>
   </div>
-</section>
-
-<section class="read-col">
-  <div class="desc">
-    <h2>About this ebook</h2>
-    <p class="lede" style="color:var(--muted);font-size:20px;margin:0 0 18px">Pack, move, and settle in without the chaos.</p>
-    <p>Moving is consistently ranked among life&#x27;s most stressful events, and disorganization is the main reason. Boxes go unlabeled, essentials vanish, and the new home fills with clutter you meant to leave behind. This book replaces that chaos with a clear plan. From the first decision to the last unpacked box, you will know what to do and when, so the move stays under control.</p><p>The approach starts well before moving day. You declutter first so you move less, then pack room by room with a labeling system that makes unpacking simple. The book covers the move itself, the crucial first night, and settling in without recreating the clutter you escaped. A move is a rare chance to reset your whole home, and this plan helps you seize it.</p>
-    <div class="desc-h">What is inside</div>
-    <ul><li>Declutter before you pack so you move less</li><li>Build a packing timeline that prevents last minute panic</li><li>Label boxes so unpacking is fast and obvious</li><li>Pack an essentials kit for a calm first night</li><li>Coordinate moving day without forgotten details</li><li>Set up the new home without recreating clutter</li><li>Settle in room by room with a clear order</li></ul>
-  </div>
-</section>
-
-<section class="xsell">
-  <h2>📖 More from the library</h2>
-  <div class="grid">
-    <a class="card" href="../books/the-15-minute-declutter.html">
-      <div class="card-cover">
-        <img src="../covers/the-15-minute-declutter.jpg" alt="The 15-Minute Declutter" loading="lazy">
-        <span class="card-bucket">🏠 Home guides</span>
-      </div>
-      <div class="card-body">
-        <h3 class="card-title">The 15-Minute Declutter</h3>
-        <div class="card-foot">
-          <span class="card-price mono">$19.95</span>
-          <span class="card-cta">View →</span>
-        </div>
-      </div>
-    </a>
-    <a class="card" href="../books/small-space-storage-playbook.html">
-      <div class="card-cover">
-        <img src="../covers/small-space-storage-playbook.jpg" alt="Small-Space Storage Playbook" loading="lazy">
-        <span class="card-bucket">🏠 Home guides</span>
-      </div>
-      <div class="card-body">
-        <h3 class="card-title">Small-Space Storage Playbook</h3>
-        <div class="card-foot">
-          <span class="card-price mono">$22.49</span>
-          <span class="card-cta">View →</span>
-        </div>
-      </div>
-    </a>
-    <a class="card" href="../books/the-paper-and-inbox-reset.html">
-      <div class="card-cover">
-        <img src="../covers/the-paper-and-inbox-reset.jpg" alt="The Paper &amp; Inbox Reset" loading="lazy">
-        <span class="card-bucket">🏠 Home guides</span>
-      </div>
-      <div class="card-body">
-        <h3 class="card-title">The Paper &amp; Inbox Reset</h3>
-        <div class="card-foot">
-          <span class="card-price mono">$21.95</span>
-          <span class="card-cta">View →</span>
-        </div>
-      </div>
-    </a>
-  </div>
-</section>
-
-
-  <footer class="foot">
-    <div class="row">
-      <div class="colophon">
-        <strong>Nest</strong> is a small online shop for practical home organization ebooks. Simple, doable guides on decluttering, storage, taming paper, and resetting every room.<br><br>
-        [Company details to be added]
-      </div>
-      <div>
-        <h4>Shop</h4>
-        <a href="../index.html#library">All books</a>
-        <a href="../index.html#about">About Nest</a>
-        <a href="../checkout.html">Cart</a>
-      </div>
-      <div>
-        <h4>Help</h4>
-        <a href="../delivery.html">Delivery</a>
-        <a href="../returns.html">Refunds</a>
-        <a href="mailto:help@nestreads.com">help@nestreads.com</a>
-      </div>
-      <div>
-        <h4>Legal</h4>
-        <a href="../terms.html">Terms</a>
-        <a href="../privacy.html">Privacy</a>
-        <a href="../returns.html">Refund policy</a>
-      </div>
+</main>
+<footer class="foot-main"><div class="wrap">
+  <div class="foot-top">
+    <div>
+      <a class="brand" href="../index.html">Nest<span class="dot">.</span></a>
+      <p class="foot-tag">Short, practical ebooks for calm, clutter free homes built on simple systems.</p>
     </div>
-    <div class="smallprint">
-      <span>© 2026 Nest. All rights reserved.</span>
-      <span>Built for a calmer home.</span>
-    </div>
-  </footer>
-
+    <nav class="foot-links">
+      <a href="../index.html#library">Library</a>
+      <a href="../index.html#about">About</a>
+      <a href="../delivery.html">Delivery</a>
+      <a href="../returns.html">Refunds</a>
+      <a href="../privacy.html">Privacy</a>
+      <a href="../terms.html">Terms</a>
+    </nav>
+  </div>
+  <div class="foot-bottom">
+    <span>&copy; 2026 Nest. All rights reserved.</span>
+    <span>Delivered as instant PDF downloads.</span>
+  </div>
+</div></footer>
 <script>
-  
-  const CURRENCY_SYMBOL = '$';
-  function readCart() { try { return JSON.parse(localStorage.getItem('cart_v1') || '[]'); } catch(e) { return []; } }
-  function writeCart(c) { localStorage.setItem('cart_v1', JSON.stringify(c)); paintCart(); }
-  function addToCart(item) {
-    const c = readCart();
-    const existing = c.find(x => x.slug === item.slug);
-    if (existing) existing.qty = (existing.qty || 1) + 1;
-    else c.push({...item, qty: 1});
-    writeCart(c);
-  }
-  function cartCount() { return readCart().reduce((n, i) => n + (i.qty || 1), 0); }
-  function paintCart() {
-    const n = cartCount();
-    const el = document.getElementById('cart-count');
-    const btn = document.getElementById('cart-btn');
-    if (el) el.textContent = n;
-    if (btn) btn.dataset.empty = n === 0 ? '1' : '0';
-  }
-  document.addEventListener('DOMContentLoaded', paintCart);
-  window.addEventListener('storage', paintCart);
-
-  const SKU = {"slug": "the-moving-day-organizer", "title": "The Moving Day Organizer", "price": 19.95, "deliverables": ["PDF"], "author": "Nest"};
-  document.getElementById('add').addEventListener('click', () => {
-    addToCart(SKU);
-    const m = document.getElementById('add-msg');
-    m.classList.add('show');
-    setTimeout(() => m.classList.remove('show'), 1600);
-  });
-  document.getElementById('buy').addEventListener('click', () => {
-    addToCart(SKU);
-    location.href = '../checkout.html';
-  });
+function readCart(){try{return JSON.parse(localStorage.getItem('cart_v1')||'[]')}catch(e){return[]}}
+function writeCart(c){localStorage.setItem('cart_v1',JSON.stringify(c));paintCart()}
+function addToCart(it){const c=readCart();const x=c.find(i=>i.slug===it.slug);if(x)x.qty=(x.qty||1)+1;else c.push({...it,qty:1});writeCart(c)}
+function cartCount(){return readCart().reduce((n,i)=>n+(i.qty||1),0)}
+function paintCart(){const n=cartCount();const el=document.getElementById('cart-count');if(el)el.textContent=n}
+document.addEventListener('DOMContentLoaded',paintCart);window.addEventListener('storage',paintCart)
+</script>
+<script>
+const SKU={"slug":"the-moving-day-organizer","title":"The Moving Day Organizer","price":19.95,"deliverables":["PDF"],"author":"Nest"};
+document.getElementById('add').onclick=()=>{addToCart(SKU);const m=document.getElementById('add-msg');if(m){m.classList.add('show');setTimeout(()=>m.classList.remove('show'),1500)}};
+document.getElementById('buy').onclick=()=>{addToCart(SKU);location.href='../checkout.html'};
 </script>
 </body>
 </html>
